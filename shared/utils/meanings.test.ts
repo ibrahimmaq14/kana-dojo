@@ -13,6 +13,19 @@ describe('normalizeAnswerValue', () => {
     expect(normalizeAnswerValue('か\u3099')).toBe('が');
   });
 
+  it.each([
+    ['か\u200B\u3099', 'が'],
+    ['ｶ\u200Bﾞ', 'ガ'],
+    ['ﾊ\u2060ﾟ', 'パ'],
+    ['e\u00AD\u0301', 'é'],
+  ])(
+    'composes pasted marks in %j after removing invisible characters',
+    (answer, expected) => {
+      expect(normalizeAnswerValue(answer)).toBe(expected);
+      expect(normalizeAnswerValue(normalizeAnswerValue(answer))).toBe(expected);
+    },
+  );
+
   it('folds full-width Latin and half-width katakana', () => {
     expect(normalizeAnswerValue('  Ｈｅｌｌｏ  ')).toBe('hello');
     expect(normalizeAnswerValue('ＯＫ')).toBe(normalizeAnswerValue('OK'));

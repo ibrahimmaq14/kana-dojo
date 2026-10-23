@@ -67,6 +67,15 @@ describe('isVocabularyMeaningAnswerCorrect', () => {
     },
   );
 
+  it.each(['カ\u200B\u3099ク', 'ｶ\u200Bﾞｸ'])(
+    'accepts pasted reverse reading with separated dakuten %j',
+    answer => {
+      const word = { ...vocabulary, word: '学', reading: 'ガク' };
+
+      expect(isVocabularyMeaningAnswerCorrect(word, answer, true)).toBe(true);
+    },
+  );
+
   it.each(['speak', 'Speak', 'to speak', '  TO   SPEAK  '])(
     'accepts optional infinitive prefix in meaning answer %s',
     answer => {

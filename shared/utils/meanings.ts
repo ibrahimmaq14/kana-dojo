@@ -21,11 +21,12 @@ const INVISIBLE_CHARACTERS = /[\u00AD\u200B-\u200F\u2060-\u2064\uFEFF]/g;
  * NFKC folds compatibility forms onto their standard spelling, so full-width
  * Latin ("ＯＫ"), half-width katakana ("ｱﾒﾘｶ") and non-breaking or
  * ideographic spaces match what the user can actually type.
+ * Strip invisible characters first so they cannot interrupt combining marks.
  */
 export const normalizeAnswerValue = (value: string): string =>
   value
-    .normalize('NFKC')
     .replace(INVISIBLE_CHARACTERS, '')
+    .normalize('NFKC')
     .replace(/\s+/g, ' ')
     .trim()
     .toLowerCase();
